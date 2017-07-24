@@ -1,0 +1,30 @@
+﻿{
+  "name": "GraficARG",
+  "version": "1.0.0",
+  "description": "Una GUI Boilerplate para laburar con datasets desde Mongo",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://PatricioJulian@bitbucket.org/PatricioJulian/fedex1.git"
+  },
+  "author": "Patricio Gerpe, Nicolas Aguero",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/PatricioJulian/fedex1#readme",
+  "devDependencies": {
+    "electron": "^1.4.8"
+  },
+  "dependencies": {
+    "babyparse": "^0.4.6",
+    "body-parser": "^1.17.2",
+    "dookie": "^0.1.19",
+    "fine-uploader": "^5.14.2",
+    "fs": "0.0.1-security",
+    "hammer": "0.0.5",
+    "jquery": "^3.2.1",
+    "mongo-datatable": "^1.0.1",
+    "mongodb": "^2.2.30"
+  }
+}

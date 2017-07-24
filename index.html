@@ -1,0 +1,223 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GraficARG</title>
+  	  <script src="./js/papaparse.min.js"></script>
+
+    <link rel="stylesheet" href="css/materialize.css">
+  <link rel="stylesheet" href="css/animate.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="js/jquery.playSound.js" type="text/javascript"></script>
+  <script src="js/jquery-ui.min.js" type="text/javascript"></script>
+  <script src="js/hammer.min.js" onload="window.Hammer = module.exports;"></script>
+  <script src="js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/ju/dt-1.10.15/b-1.3.1/r-2.1.1/datatables.min.css"/>
+ 
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/comportamiento.js"></script>
+
+  
+</head>
+
+<body>
+
+ <div class="navbar-fixed">
+  <nav class="nav-extended">
+ <div class="nav-wrapper white">
+   <a href="#" class="brand-logo green-text text-darken-2">GraficARG</a>
+
+   <ul id="nav-mobile" class="right hide-on-med-and-down">
+   </ul>
+ </div>
+ <div class="nav-content">
+          <a id="menu" class="dropdown-button btn-floating  btn-large halfway-fab waves-effect waves-light green accent-1">
+        <i class="material-icons">assessment</i>
+      </a>
+    </div>
+</nav>
+</div>
+
+
+
+
+  
+
+
+<div class="row main">
+
+  <div class="col s6">
+
+    <div class="card white">
+		<div id="sideBar"class="card-content">
+
+  
+		<p>Total de registros: <div class="chip" id="nroRegis">0</div></p>
+ 
+
+
+  
+		<div class="chart-container" style="position: relative; height:40vh; width:40vw">
+			<canvas id="grafico1" width="50" height="50"></canvas>
+		</div>
+
+		</div>
+		</div>
+	</div>
+   <div class="col s6">
+
+    <div class="card white">
+	   <div class="progress">
+          <div id="cargando" class="determinate" style="width: 0%"></div>
+      </div>
+
+	<div class="row">
+
+	  
+ 
+
+ <script>
+ 
+ 
+ // CODIGO PARA RENDERIZAR TABLA
+$(document).ready(function() {
+    $('#example').DataTable( {
+        "ajax": "db/prueba8.json",
+        "columns": [
+            { "data": "caracter" },
+            { "data": "programa_desc" },
+            { "data": "monto_presupuestado" }
+        ],
+		scrollY:        '55vh',
+        scrollCollapse: true,
+		language: {
+				"decimal":        "",
+				"emptyTable":     "No hay data disponible",
+				"info":           "Mostrando _START_ to _END_ of _TOTAL_ registros",
+				"infoEmpty":      "Mostrando 0 de 0 registros",
+				"infoFiltered":   "(filtered from _MAX_ total entries)",
+				"infoPostFix":    "",
+				"thousands":      ",",
+				"lengthMenu":     "Mostrando _MENU_ registros",
+				"loadingRecords": "Cargando...",
+				"processing":     "Procesando...",
+				"search":         "Buscar:",
+				"zeroRecords":    "No se encontraron resultados",
+				"paginate": {
+					"first":      "Primero",
+					"last":       "Último",
+					"next":       "Siguiente",
+					"previous":   "Anterior"
+				},
+				"aria": {
+					"sortAscending":  ": activar para ordenar ascendentemente",
+					"sortDescending": ": activar para ordenar descendentemente"
+				}
+			}
+    } );
+} );
+
+
+const {ipcRenderer} = require('electron')
+
+
+	//CODIGO PARA ENVIAR MENSAJES AL BACKEND (MAINJS)
+	document.getElementById("menu").onclick  = function(){
+	ipcRenderer.send("mensaje", "hola");
+	};
+	
+	// CODIGO PARA RECIBIR MENSAJES DEL BACKEND (MAINJS)
+	ipcRenderer.on('cantidadDocumentos', (event, arg, arg2) => {
+	console.log("Mensaje recibido:"+arg);
+	console.log("Mensaje recibido:"+arg2);
+	});
+
+
+	//CODIGO PARA RENDERIZAR GRAFICO
+var ctx = document.getElementById("grafico1").getContext('2d');
+var grafico1 = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Administración Central", "Organismos Descentralizados", "Formacion y Sancion de Leyes Nacionales", "Asistencia a la Actividad Cooperativa y Mutual", "Control y Fiscalizacion de la Actividad Aseguradora y Reaseguradora", "Resolucion de Cuestiones Dudosas y Litigiosas"],
+        datasets: [{
+            label: '$ de monto presupuestado',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+</script>
+
+<table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Caracter</th>
+                <th>Programa</th>
+                <th>Presupuesto</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+               <th>Caracter</th>
+                <th>Programa</th>
+                <th>Presupuesto</th>
+            </tr>
+        </tfoot>
+    </table>
+
+
+</div>
+</div>
+  <script type="text/javascript">
+
+
+//   Este código activa la consola de JS con el shortcut CTRL+F12, una vez terminada la APP hay que borrar este código. -->
+    var remote = require('electron').remote;
+    document.addEventListener('keydown', function (e) {
+      if (e.which === 123) {
+        remote.getCurrentWindow().webContents.openDevTools();
+      } else if (e.which === 116) {
+        location.reload();
+      }
+    });
+
+</script>
+
+
+
+</body>
+</html>

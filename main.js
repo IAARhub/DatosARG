@@ -7,14 +7,13 @@ fs = require('fs');
 //Referencia a libreria para mandar mensajes del main al renderer
 const {ipcMain} = require('electron')
 
-// hacemos referencia a la dependencia 
+// hacemos referencia a la dependencia de MongoDB
 var mongodb = require('mongodb');
 
-// obtenemos el server MongoDB que dejamos corriendo
-// *** el puerto 27017 es el default de MongoDB
+// Puerto y server de mongo
 var server = new mongodb.Server("127.0.0.1", 27017, {});
 
-// obtenemos la base de datos de prueba que creamos
+// Llamamos a nuestra base de datos
 var db = new mongodb.Db('pruebas', server, {})
 
 var totalRegistros = "";
@@ -41,15 +40,37 @@ db.open(function (error, client) {
 	  });
 	  
 
+	 //disparamos un query buscando la persona que habiamos insertado por consola
+	 
+
+
+collection.find().forEach(function(e,i) {
+		  e.monto_presupuestado = e.monto_presupuestado.toString();
+		  e.monto_presupuestado = e.monto_presupuestado.replace(",", ".");
+		  e.monto_presupuestado = Number(e.monto_presupuestado);
+		  collection.save(e);
+	  });
+
+
+	  
+  setInterval(function(){  
 	collection.aggregate([
 					{
-					$project: { "monto_presupuestado" : 1, "programa_desc": 1, _id: 0 }
+					$project: { "monto_presupuestado" : 1, "caracter": 1, _id: 0 }
+					},
+
+                    { 
+					$group: 
+						{ 
+							_id:
+							{ 
+							"caracter": "$caracter", 
+							"total": { $sum: "$monto_presupuestado" } 
+							} 
+						}
 					},
                     { 
-					$group: {"programa_desc": "$\"programa_desc\"", "monto_presupuestado": { $sum: Number("$\"monto_presupuestado\"") } }
-					},
-                    { 
-					$sort: { "monto_presupuestado": -1 } 
+					$sort: { "total": 1 } 
 					}
 					]).toArray(function(err, docs) {
 
@@ -59,6 +80,8 @@ db.open(function (error, client) {
 
 	
   });
+  
+  }, 3000);
   
 
   

@@ -29,7 +29,7 @@ db.open(function (error, client) {
   //Obtenemos la coleccion personas que creamos antes
   var collection = db.collection("prueba8");
   
-	  //disparamos un query buscando la persona que habiamos insertado por consola
+
 	  collection.find({}).toArray(function(err, docs) {
 
 		//imprimimos en la consola el resultado

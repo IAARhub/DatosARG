@@ -23,10 +23,8 @@ var aggData = "";
 db.open(function (error, client) {
   if (error) throw error;
 
-  //en el parámetro client recibimos el cliente para comenzar a hacer llamadas
-  //este parámetro sería lo mismo que hicimos por consola al llamar a mongo
   
-  //Obtenemos la coleccion personas que creamos antes
+  //Obtenemos la coleccion 
   var collection = db.collection("prueba8");
   
 

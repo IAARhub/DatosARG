@@ -40,7 +40,6 @@ db.open(function (error, client) {
 	  });
 	  
 
-	 //disparamos un query buscando la persona que habiamos insertado por consola
 	 
 
 
